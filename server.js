@@ -16,7 +16,7 @@ function monthsDifference(dateFrom, dateTo) {
            (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
 }
 
-// Función para ajustar el monto según la empresa y antigüedad
+// Función para ajustar el monto según la empresa, fecha y antigüedad
 function adjustAmount(transaction) {
     if (transaction.company === 'Medife') {
         const transactionDate = new Date(transaction.date);
