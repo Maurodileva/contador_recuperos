@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acumulador de Pagos</title>
+</head>
+<body>
+    <h1>Acumulador de Pagos</h1>
+    <form id="moneyForm">
+        <label for="amount">Monto:</label>
+        <input type="number" id="amount" name="amount" required>
+        <label for="company">Empresa:</label>
+        <select id="company" name="company" required>
+            <option value="Creditia">Creditia</option>
+            <option value="Medife">Medife</option>
+            <option value="Wenance">Wenance</option>
+        </select>
+        <label for="date">Fecha de Mora:</label>
+        <input type="date" id="date" name="date" required>
+        <button type="submit">Agregar Pago</button>
+    </form>
+    <button id="resetButton">Reiniciar Monto</button>
+    <div id="totalAmount">Monto acumulado: 0</div>
+    <script src="script.js"></script>
+</body>
+</html> 

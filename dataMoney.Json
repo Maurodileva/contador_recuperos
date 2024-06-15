@@ -1,0 +1,15 @@
+{
+  "totalAmount": 2000,
+  "transactions": [
+    {
+      "amount": 1000,
+      "company": "Medife",
+      "date": "2023-12-06"
+    },
+    {
+      "amount": 1000,
+      "company": "Medife",
+      "date": "2023-11-16"
+    }
+  ]
+}
