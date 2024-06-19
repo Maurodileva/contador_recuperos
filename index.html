@@ -7,47 +7,63 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <section>
-        <div class="contenedor-inputs">
-        <h1>Calculador De Recupero</h1>
-        <form id="moneyForm">
-            <label for="amount">Monto:</label>
-            <input type="number" id="amount" name="amount" required>
-            <label for="company">Cartera:</label>
-            <select id="company" name="company" required>
-                <option value="Creditia">Creditia</option>
-                <option value="Medife">Medife</option>
-                <option value="Wenance">Wenance</option>
-            </select>
-            <label for="date">Fecha de Pago:</label>
-            <input type="date" id="date" name="date" required>
-            <label for="dni">DNI:</label>
-            <input type="text" id="dni" name="dni" required>
-            <button type="submit">Agregar Pago</button>
-        </div>    
-    </form>
-        </div>
-    </section>
-    <button id="resetButton">Reiniciar Monto</button>
-    <button id="toggleTableButton">Mostrar Pagos</button>
-    <div id="paymentTable" class="hidden">
-
-
-        <table border="3">
-            <thead>
-                <tr>
-                    <th>Monto</th>
-                    <th>Empresa</th>
-                    <th>Fecha de Mora</th>
-                    <th>DNI</th>
-                </tr>
-            </thead>
-            <tbody id="paymentTableBody">
-                <!-- Aquí se llenará dinámicamente con JavaScript -->
-            </tbody>
-        </table>
+    <div class="container">
+        <section class="form-section">
+            <div class="contenedor-inputs">
+                <h1>Calculador De Recupero</h1>
+                <form id="moneyForm">
+                    <label for="amount">Monto:</label>
+                    <input type="number" id="amount" name="amount" required>
+                    <label for="company">Cartera:</label>
+                    <select id="company" name="company" required>
+                        <option value="Creditia">Creditia</option>
+                        <option value="Medife">Medife</option>
+                        <option value="Wenance">Wenance</option>
+                    </select>
+                    <label for="date">Fecha de Mora:</label>
+                    <input type="date" id="date" name="date" required>
+                    <label for="dni">DNI:</label>
+                    <input type="text" id="dni" name="dni" required>
+                    <button type="submit">Agregar Pago</button>
+                </form>
+                <label for="goal">Objetivo:</label>
+                <input type="number" id="goal" name="goal">
+            </div>
+            <div class="filtro-empresa">
+                <label for="filterCompany">Filtrar por Cartera:</label>
+                <select id="filterCompany" name="filterCompany">
+                    <option value="all">Todas</option>
+                    <option value="Creditia">Creditia</option>
+                    <option value="Medife">Medife</option>
+                    <option value="Wenance">Wenance</option>
+                </select>
+            </div>
+            <button id="resetButton">Reiniciar Monto</button>
+        </section>
+        <section class="data-section">
+            <div id="totalAmount">Monto acumulado: 0</div>
+            <div id="amountRemaining">Falta para el objetivo: 0</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <button id="toggleTableButton">Mostrar Pagos</button>
+            <div id="paymentTable" class="hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Monto</th>
+                            <th>Empresa</th>
+                            <th>Fecha de Mora</th>
+                            <th>DNI</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentTableBody">
+                        <!-- Aquí se llenará dinámicamente con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
-    <div id="totalAmount">Monto acumulado: 0</div>
     <script src="script.js"></script>
 </body>
 </html>

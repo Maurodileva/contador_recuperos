@@ -1,17 +1,17 @@
 {
-  "totalAmount": 1650,
+  "totalAmount": 33200,
   "transactions": [
     {
-      "amount": 1000,
-      "company": "Wenance",
-      "date": "2024-05-17",
-      "dni": "43919232"
+      "amount": 18200,
+      "company": "Medife",
+      "date": "2024-06-12",
+      "dni": "38049716"
     },
     {
-      "amount": 650,
-      "company": "Medife",
-      "date": "2024-05-14",
-      "dni": "17456903"
+      "amount": 15000,
+      "company": "Creditia",
+      "date": "2024-06-04",
+      "dni": "38049716"
     }
   ]
 }

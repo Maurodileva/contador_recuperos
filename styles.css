@@ -1,28 +1,46 @@
+/* Existing styles */
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
     background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.contenedor-inputs {
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.form-section,
+.data-section {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    width: 45vw;
+}
+
+.form-section {
     max-width: 400px;
+}
+
+.data-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
     width: 100%;
-    margin-bottom: 20px;
 }
 
 h1 {
     font-size: 24px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 form {
@@ -68,9 +86,7 @@ button:hover {
 
 #paymentTable {
     width: 100%;
-    max-width: 600px;
     margin-top: 20px;
-    text-align: center; /* Centrar el contenido de la tabla */
 }
 
 #paymentTable table {
@@ -82,6 +98,7 @@ button:hover {
 #paymentTable td {
     padding: 8px;
     border: 1px solid #ddd;
+    text-align: center;
 }
 
 #paymentTable th {
@@ -92,7 +109,61 @@ button:hover {
     display: none;
 }
 
-#totalAmount {
+#totalAmount,
+#amountRemaining {
     font-size: 18px;
     margin-top: 20px;
+}
+
+.progress-container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 8px;
+    margin-top: 20px;
+    height: 30px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0;
+    background-color: #4CAF50;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}
+
+.filtro-empresa {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.filtro-empresa select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Ajuste de anchura para la sección de filtro */
+.filtro-empresa {
+    width: calc(100% - 40px); /* Ajustar ancho con padding incluido */
+}
+
+#toggleTableButton {
+    align-self: flex-end; /* Mover el botón a la derecha */
+}
+
+/* Estilos para el overflow de la tabla */
+#paymentTable {
+    max-height: 500px; /* Ajustar la altura máxima según sea necesario */
+    overflow-y: auto;
+    width: 100%;
 }

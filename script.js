@@ -5,6 +5,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const paymentTable = document.getElementById('paymentTable');
     const paymentTableBody = document.getElementById('paymentTableBody');
     const totalAmountDisplay = document.getElementById('totalAmount');
+    const amountRemainingDisplay = document.getElementById('amountRemaining');
+    const progressBar = document.getElementById('progressBar');
+    const goalInput = document.getElementById('goal');
+    const filterCompany = document.getElementById('filterCompany');
+
+    let goal = 0;
+    let transactions = []; // Variable para almacenar todas las transacciones
 
     // Función para cargar el JSON desde el servidor
     function loadMoneyData() {
@@ -36,17 +43,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Función para actualizar la visualización del monto acumulado
-    function updateTotalAmountDisplay(totalAmount) {
-        totalAmountDisplay.textContent = `Monto acumulado: ${totalAmount}`;
+    function updateTotalAmountDisplay(transactionsToShow) {
+        const totalAmount = transactionsToShow.reduce((sum, transaction) => sum + transaction.amount, 0);
+        totalAmountDisplay.textContent = `Monto acumulado: ${totalAmount.toFixed(2)}`;
+        updateProgressBar(totalAmount);
+        updateAmountRemaining(totalAmount);
     }
 
     // Función para llenar la tabla con los pagos registrados
-    function fillPaymentTable(transactions) {
+    function fillPaymentTable(transactionsToShow) {
         paymentTableBody.innerHTML = '';
-        transactions.forEach(transaction => {
+        transactionsToShow.forEach(transaction => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${transaction.amount}</td>
+                <td>${transaction.amount.toFixed(2)}</td>
                 <td>${transaction.company}</td>
                 <td>${transaction.date}</td>
                 <td>${transaction.dni}</td>
@@ -55,35 +65,40 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Cargar y mostrar el monto acumulado al cargar la página
-    loadMoneyData().then(moneyData => {
-        if (moneyData) {
-            updateTotalAmountDisplay(moneyData.totalAmount);
-            fillPaymentTable(moneyData.transactions);
-        }
-    });
+    // Función para actualizar la barra de progreso
+    function updateProgressBar(totalAmount) {
+        const percentage = goal > 0 ? (totalAmount / goal) * 100 : 0;
+        progressBar.style.width = `${Math.min(percentage, 100)}%`;
+        progressBar.textContent = `${Math.min(percentage, 100).toFixed(2)}%`;
+    }
+
+    // Función para actualizar la cantidad restante para alcanzar el objetivo
+    function updateAmountRemaining(totalAmount) {
+        const amountRemaining = Math.max(goal - totalAmount, 0);
+        amountRemainingDisplay.textContent = `Falta para el objetivo: ${amountRemaining.toFixed(2)}`;
+    }
+
+    // Función para filtrar las transacciones por empresa
+    function filterTransactions() {
+        const company = filterCompany.value;
+        const filteredTransactions = transactions.filter(transaction => company === 'all' || transaction.company === company);
+        fillPaymentTable(filteredTransactions);
+        updateTotalAmountDisplay(filteredTransactions);
+    }
 
     // Manejar el envío del formulario
     form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevenir el envío del formulario
+        event.preventDefault();
 
-        // Obtener los valores ingresados
         const amountInput = document.getElementById('amount');
         const companyInput = document.getElementById('company');
         const dateInput = document.getElementById('date');
         const dniInput = document.getElementById('dni');
 
-        // Convertir los valores a los tipos adecuados
-        let amount = parseFloat(amountInput.value);
-        let company = companyInput.value;
-        let date = dateInput.value;
-        let dni = dniInput.value;
-
-        // Verificar si la conversión fue exitosa
-        if (isNaN(amount)) {
-            alert('Por favor, ingrese un número válido.');
-            return;
-        }
+        const amount = parseFloat(amountInput.value);
+        const company = companyInput.value;
+        const date = dateInput.value;
+        const dni = dniInput.value;
 
         // Crear la nueva transacción
         const newTransaction = {
@@ -93,17 +108,16 @@ document.addEventListener('DOMContentLoaded', function () {
             dni: dni
         };
 
-        // Guardar la transacción en el servidor
+        // Guardar la transacción en el servidor y manejar los datos después
         saveTransaction(newTransaction).then(() => {
-            // Recargar los datos después de guardar la transacción
             loadMoneyData().then(moneyData => {
-                // Actualizar la visualización del monto acumulado
-                updateTotalAmountDisplay(moneyData.totalAmount);
-                // Actualizar la tabla de pagos
-                fillPaymentTable(moneyData.transactions);
+                if (moneyData) {
+                    transactions = moneyData.transactions;
+                    filterTransactions();
+                }
             });
 
-            // Limpiar los campos de entrada
+            // Limpiar los campos de entrada después de guardar
             amountInput.value = '';
             companyInput.value = 'Creditia';
             dateInput.value = '';
@@ -114,10 +128,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Manejar el reinicio del monto acumulado
     resetButton.addEventListener('click', function () {
         resetMoneyData().then(data => {
-            // Actualizar la visualización del monto acumulado
-            updateTotalAmountDisplay(data.totalAmount);
-            // Limpiar la tabla de pagos
-            paymentTableBody.innerHTML = '';
+            transactions = [];
+            updateTotalAmountDisplay(transactions);
+            fillPaymentTable(transactions);
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+            amountRemainingDisplay.textContent = 'Falta para el objetivo: 0';
         });
     });
 
@@ -128,6 +144,28 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleTableButton.textContent = 'Ocultar Pagos';
         } else {
             toggleTableButton.textContent = 'Mostrar Pagos';
+        }
+    });
+
+    // Manejar el cambio del objetivo
+    goalInput.addEventListener('input', function () {
+        goal = parseFloat(goalInput.value);
+        if (isNaN(goal) || goal <= 0) {
+            goal = 0;
+        }
+        updateProgressBar(transactions.reduce((sum, transaction) => sum + transaction.amount, 0));
+        updateAmountRemaining(transactions.reduce((sum, transaction) => sum + transaction.amount, 0));
+    });
+
+    // Manejar el cambio del filtro por empresa
+    filterCompany.addEventListener('change', filterTransactions);
+
+    // Inicializar los datos al cargar la página
+    loadMoneyData().then(moneyData => {
+        if (moneyData) {
+            transactions = moneyData.transactions;
+            updateTotalAmountDisplay(transactions);
+            fillPaymentTable(transactions);
         }
     });
 });
